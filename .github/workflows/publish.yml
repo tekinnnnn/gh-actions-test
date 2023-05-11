@@ -47,9 +47,19 @@ jobs:
       - name: Build package
         run: yarn build
 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Run tests
         run: yarn test
 
+  publish:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Publish package
-        if: github.event_name == 'release' || github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/responsive_preview')
+        if: ${{ success() && (github.event_name == 'release' || github.ref == 'refs/heads/responsive_preview' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/responsive_preview'))) }}
         run: yarn start
