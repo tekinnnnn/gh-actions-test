@@ -1,9 +1,5 @@
 name: Publish
 on:
-  # commit to master
-  push:
-    branches:
-      - master
   # manual trigger
   workflow_dispatch:
   # on release creation
@@ -13,6 +9,7 @@ jobs:
   build-test:
     uses: ./.github/workflows/test.yml
   publish:
+    needs: build-test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
