@@ -1,5 +1,9 @@
 name: Publish
 on:
+  # commit to master
+  push:
+    branches:
+      - master
   # manual trigger
   workflow_dispatch:
   # on release creation
