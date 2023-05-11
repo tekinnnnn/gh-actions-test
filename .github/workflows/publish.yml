@@ -52,6 +52,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Run tests
         run: yarn test
 
@@ -60,6 +66,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Publish package
         if: ${{ success() && (github.event_name == 'release' || github.ref == 'refs/heads/responsive_preview' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/responsive_preview'))) }}
         run: yarn start
