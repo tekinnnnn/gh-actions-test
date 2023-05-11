@@ -16,7 +16,7 @@ on:
   release:
     types: [created]
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,28 +47,11 @@ jobs:
       - name: Build package
         run: yarn build
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: Run tests
         run: yarn test
 
   publish:
-    needs: [build, test]
+    needs: [build-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
