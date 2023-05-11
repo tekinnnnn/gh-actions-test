@@ -47,6 +47,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Run tests
       run: yarn test
   publish:
@@ -54,5 +55,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Say hello
       run: yarn start
