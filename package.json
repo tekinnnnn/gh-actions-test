@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "lint": "echo \"Lint me babe\" && exit 0",
+    "build": "echo \"Build me babe\" && exit 0",
+    "test": "echo \"Test me babe\" && exit 0",
     "start": "node index.js"
   },
   "keywords": [],
