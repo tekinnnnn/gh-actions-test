@@ -68,7 +68,7 @@ jobs:
       - if: ${{ steps.yarn-cache-dir-path.outputs.cache-hit != 'true' }}
         name: List the state of node modules
         continue-on-error: true
-        run: npm list
+        run: yarn list
 
       - name: Publish package
         if: ${{ success() && (github.event_name == 'release' || github.ref == 'refs/heads/responsive_preview' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/responsive_preview'))) }}
