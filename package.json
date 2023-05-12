@@ -1,6 +1,6 @@
 {
   "name": "@tekinnnnn/gh-actions-test",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "index.js",
   "publishConfig": {
@@ -16,7 +16,9 @@
   "author": "tekin",
   "license": "ISC",
   "dependencies": {
-    "@jotforminc/dnd-builder": "3.0.0-alpha.1",
-    "is-published": "mefu/is-published"
+    "@jotforminc/dnd-builder": "3.0.0-alpha.1"
+  },
+  "devDependencies": {
+  "is-published": "mefu/is-published"
   }
 }
