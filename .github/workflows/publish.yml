@@ -1,75 +1,35 @@
-name: Build > Test > Publish
+name: Publish
 on:
   # manual trigger
   workflow_dispatch:
-  # on pull request
-  pull_request:
-    branches:
-      - "master"
-      - "responsive_preview"
-  # on push to master branch
-  push:
-    branches:
-      - "master"
-      - "responsive_preview"
-  # on release
+  # on release creation
   release:
     types: [created]
 jobs:
   build-test:
+    uses: ./.github/workflows/build-test.yml
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
-          registry-url: "https://registry.npmjs.org"
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v2
+      - name: Cache
+        uses: actions/cache@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
-
-      - name: Run linter
-        run: yarn lint
 
       - name: Build package
         run: yarn build
 
-      - name: Run tests
-        run: yarn test
-
-  publish:
-    needs: [build-test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - if: ${{ steps.yarn-cache-dir-path.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        continue-on-error: true
-        run: yarn list
-
       - name: Publish package
-        if: ${{ success() && (github.event_name == 'release' || github.ref == 'refs/heads/responsive_preview' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/responsive_preview'))) }}
-        run: yarn start
+        if: ${{ success() }}
+        run: yarn is-published || yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
