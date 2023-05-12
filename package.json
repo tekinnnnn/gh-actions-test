@@ -1,8 +1,11 @@
 {
-  "name": "gh-actions-test",
-  "version": "1.0.4",
+  "name": "@tekinnnnn/gh-actions-test",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com/"
+},
   "scripts": {
     "lint": "echo \"Lint me babe\" && exit 0",
     "build": "echo \"Build me babe\" && mkdir -p dist && echo \"dist me babe\" > ./dist/me.txt && exit 0",
@@ -13,6 +16,7 @@
   "author": "tekin",
   "license": "ISC",
   "dependencies": {
-    "@jotforminc/dnd-builder": "3.0.0-alpha.1"
+    "@jotforminc/dnd-builder": "3.0.0-alpha.1",
+    "is-published": "mefu/is-published"
   }
 }
