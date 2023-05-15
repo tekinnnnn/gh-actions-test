@@ -34,9 +34,10 @@ jobs:
         if: github.event_name == 'release' && github.event.release.draft == false
         run: |
           if [[ ${{ github.event.release.prerelease }} == true || ${{ github.event.release.tag_name }} =~ -alpha|-beta|-rc ]]; then
-            yarn publish --tag next --new-version ${{ github.event.release.tag_name }}
+            # remove "v" prefix from tag name with bash parameter expansion
+            yarn publish --tag next --new-version ${GITHUB_REF#refs/tags/v}
           else
-            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }}
+            yarn publish --tag latest --new-version ${GITHUB_REF#refs/tags/v}
           fi
 
         env:
