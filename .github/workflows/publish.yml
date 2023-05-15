@@ -43,7 +43,7 @@ jobs:
             yarn publish --tag next;
           else
             echo "prod\n";
-            yarn publish;
+            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }};
           fi
 
       - name: Publish package on tag (run only on tag)
@@ -54,7 +54,7 @@ jobs:
             yarn publish --tag next;
           else
             echo "prod\n";
-            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }};
+            yarn publish --tag latest;
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
