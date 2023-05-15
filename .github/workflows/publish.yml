@@ -54,7 +54,7 @@ jobs:
             yarn publish --tag next;
           else
             echo "prod\n";
-            yarn publish;
+            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }};
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
