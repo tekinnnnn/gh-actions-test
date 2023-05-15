@@ -32,7 +32,9 @@ jobs:
       - name: Publish package
         if: ${{ success() && github.event.release.draft == false }}
         run: |
-          if [ "${{ github.event.release.prerelease || github.ref != 'refs/heads/master' }}" = true ]; then
+          if [ "${{ github.event.release.prerelease }}" = true ] || [ "${{ github.base_ref }}" != "master" ]; then
+            echo "ref: ${{ github.ref }}\n";
+            echo "base_ref: ${{ github.base_ref }}\n";
             yarn publish --tag next;
           else
             yarn publish;
