@@ -33,6 +33,7 @@ jobs:
         if: ${{ success() && github.event.release.draft == false }}
         run: |
           if [ "${{ github.event.release.prerelease || github.ref != 'refs/heads/master' }}" = true ]; then
+            yarn version --prerelease
             yarn publish --tag next;
           else
             yarn publish;
