@@ -1,14 +1,9 @@
 name: Publish
 on:
-  # manual trigger
-  workflow_dispatch:
-  # on tag creation
-  push:
-    tags:
-      - '*-alpha.*'
-      - '*-beta.*'
-      - '*-rc.*'
-      - 'v*.*.*'
+  # on release
+  release:
+    types: [published, prereleased, created]
+  
 jobs:
   build-test:
     uses: ./.github/workflows/build-test.yml
@@ -34,13 +29,16 @@ jobs:
         run: yarn build
 
       - name: Publish package
+        if: github.event_name == 'release' && github.event.release.draft == false
         run: |
-          if [[ (${{ github.ref_type }} == 'tag' && ${{ github.ref }} =~ -alpha|-beta|-rc) || (${{ github.ref_type }} == 'branch' && ${{ github.ref }} != 'refs/heads/master') ]]; then
-            echo "next\n reference: ${{ github.ref }}";
-            yarn publish --tag next;
+          # run yarn publish --tag next if the release is a prerelease or tag is includes alpha, beta, rc
+          if [[ ${{ github.event.release.prerelease }} == true || ${{ github.event.release.tag_name }} =~ -alpha|-beta|-rc ]]; then
+            echo "branch: ${{ github.ref }}"
+            yarn publish --tag next
           else
-            echo "prod\n reference: ${{ github.ref }}";
-            yarn publish --tag latest;
+            echo "branch: ${{ github.ref }}"
+            yarn publish
           fi
+
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
