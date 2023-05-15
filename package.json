@@ -1,6 +1,6 @@
 {
   "name": "@tekinnnnn/gh-actions-test",
-  "version": "v3.2.1-alpha.4",
+  "version": "3.3.0",
   "description": "",
   "main": "index.js",
   "files": [
