@@ -34,9 +34,9 @@ jobs:
         if: github.event_name == 'release' && github.event.release.draft == false
         run: |
           if [[ ${{ github.event.release.prerelease }} == true || ${{ github.event.release.tag_name }} =~ -alpha|-beta|-rc ]]; then
-            yarn publish --tag next
+            yarn publish --tag next --new-version ${{ github.event.release.tag_name }}
           else
-            yarn publish --tag latest
+            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }}
           fi
 
         env:
