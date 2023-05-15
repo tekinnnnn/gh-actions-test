@@ -35,7 +35,7 @@ jobs:
 
       - name: Publish package
         run: |
-          if [[ ${{ github.ref }} =~ -alpha|-beta|-rc && ${{ github.ref != 'refs/head/master' }} ]]; then
+          if [[ (${{ github.ref_type }} == 'tag' && ${{ github.ref }} =~ -alpha|-beta|-rc) || (${{ github.ref_type }} == 'branch' && ${{ github.ref }} != 'master') ]]; then
             echo "next\n reference: ${{ github.ref }}";
             yarn publish --tag next;
           else
