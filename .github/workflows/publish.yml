@@ -38,7 +38,7 @@ jobs:
       - name: Publish package on release (run only on release creation and it's master branch)
         if: ${{ success() && github.event_name == 'release' && github.event.release.draft == false }}
         run: |
-          if [[ ${{ github.event.release.tag_name }} =~ '-alpha|-beta|-rc' || ${{ github.ref }} != 'refs/heads/master' ]]; then
+          if [[ ${{ github.event.release.tag_name }} =~ '-alpha|-beta|-rc' || ${{ github.event.base_ref }} != 'refs/heads/master' ]]; then
             yarn publish --tag next;
           else
             yarn publish;
