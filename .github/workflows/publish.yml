@@ -39,17 +39,21 @@ jobs:
         if: ${{ success() && github.event_name == 'release' && github.event.release.draft == false }}
         run: |
           if [[ ${{ github.event.release.prerelease }} == true ]]; then
+          echo "next\n";
             yarn publish --tag next;
           else
+            echo "prod\n";
             yarn publish;
           fi
 
       - name: Publish package on tag (run only on tag)
         if: ${{ success() && github.event_name == 'push' && github.ref_type == 'tag' }}
         run: |
-          if [[ ${{ github.ref }} =~ '-alpha|-beta|-rc' ]]; then
+          if [[ ${{ github.ref }} =~ .*-alpha.* ]]; then
+            echo "next\n";
             yarn publish --tag next;
           else
+            echo "prod\n";
             yarn publish;
           fi
         env:
