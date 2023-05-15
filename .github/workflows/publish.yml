@@ -35,10 +35,19 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Publish package
-        if: ${{ success() && github.event.release.draft == false }}
+      - name: Publish package on release (run only on release creation and it's master branch)
+        if: ${{ success() && github.event_name == 'release' && github.event.release.draft == false }}
         run: |
-          if [ ${{ github.event.release.prerelease }} == true ]; || ${{github.ref}} =~ '-alpha|-beta|-rc' ]; then
+          if [[ ${{ github.event.release.tag_name }} =~ '-alpha|-beta|-rc' || ${{ github.ref }} != 'refs/heads/master' ]]; then
+            yarn publish --tag next;
+          else
+            yarn publish;
+          fi
+
+      - name: Publish package on tag (run only on tag creation)
+        if: ${{ success() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          if [[ ${{ github.ref }} =~ '-alpha|-beta|-rc' ]]; then
             yarn publish --tag next;
           else
             yarn publish;
