@@ -33,14 +33,14 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Publish package on tag
-        if: ${{ success() && github.event_name == 'push' && github.ref_type == 'tag' }}
+      - name: Publish package
+        if: ${{ success() && (github.event_name == 'push' && github.ref_type == 'tag') || github.event_name == 'workflow_dispatch' }}
         run: |
           if [[ ${{ github.ref }} =~ -alpha|-beta|-rc ]]; then
-            echo "next\n";
+            echo "next\n reference: ${{ github.ref }}";
             yarn publish --tag next;
           else
-            echo "prod\n";
+            echo "prod\n reference: ${{ github.ref }}";
             yarn publish --tag latest;
           fi
         env:
