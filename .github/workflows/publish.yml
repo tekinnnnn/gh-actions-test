@@ -5,6 +5,12 @@ on:
   # on release creation
   release:
     types: [created, edited]
+  # on tag creation (v3.0.0-alpha.0)
+  push:
+    tags:
+      - '*-alpha.*'
+      - '*-beta.*'
+      - '*-rc.*'
 jobs:
   build-test:
     uses: ./.github/workflows/build-test.yml
@@ -32,9 +38,7 @@ jobs:
       - name: Publish package
         if: ${{ success() && github.event.release.draft == false }}
         run: |
-          if [ "${{ github.event.release.prerelease }}" = true ] || [ "${{ github.base_ref }}" != "master" ]; then
-            echo "ref: ${{ github.ref }}\n";
-            echo "base_ref: ${{ github.base_ref }}\n";
+          if [ ${{github.event.release.prerelease}} == true || (${{github.ref}} =~ '-alpha|-beta|-rc') ];
             yarn publish --tag next;
           else
             yarn publish;
