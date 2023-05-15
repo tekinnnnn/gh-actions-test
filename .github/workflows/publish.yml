@@ -5,7 +5,7 @@ on:
   # on release creation
   release:
     types: [created, edited]
-  # on tag creation (v3.0.0-alpha.0)
+  # on tag creation
   push:
     tags:
       - '*-alpha.*'
@@ -38,7 +38,7 @@ jobs:
       - name: Publish package
         if: ${{ success() && github.event.release.draft == false }}
         run: |
-          if [ ${{github.event.release.prerelease}} == true || (${{github.ref}} =~ '-alpha|-beta|-rc') ];
+          if [ ${{ github.event.release.prerelease }} == true ]; || ${{github.ref}} =~ '-alpha|-beta|-rc' ]; then
             yarn publish --tag next;
           else
             yarn publish;
