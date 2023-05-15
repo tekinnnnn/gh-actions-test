@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   # on release creation
   release:
-    types: [created, edited]
+    types: [edited]
   # on tag creation
   push:
     tags:
@@ -43,7 +43,7 @@ jobs:
             yarn publish --tag next;
           else
             echo "prod\n";
-            yarn publish --tag latest --new-version ${{ github.event.release.tag_name }};
+            yarn publish --tag latest;
           fi
 
       - name: Publish package on tag (run only on tag)
