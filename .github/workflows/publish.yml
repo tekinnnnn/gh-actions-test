@@ -45,7 +45,7 @@ jobs:
           fi
 
       - name: Publish package on tag (run only on tag creation)
-        if: ${{ success() && github.event_name == 'push' && github.event.inputs.ref_type == 'tag' }}
+        if: ${{ success() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
         run: |
           if [[ ${{ github.ref }} =~ '-alpha|-beta|-rc' ]]; then
             yarn publish --tag next;
