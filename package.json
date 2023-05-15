@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "echo \"Lint me babe\" && exit 0",
     "build": "echo \"Build me babe\" && mkdir -p dist && echo \"dist me babe\" > ./dist/me.txt && exit 0",
-    "test": "echo \"Test me babe\" && exit 0",
+    "test": "echo \"Test me babe\" && exit 1",
     "start": "node index.js"
   },
   "keywords": [],

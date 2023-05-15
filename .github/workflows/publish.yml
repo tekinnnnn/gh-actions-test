@@ -15,6 +15,7 @@ jobs:
   publish:
     needs: build-test
     runs-on: ubuntu-latest
+    if: ${{ success() }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -34,7 +35,6 @@ jobs:
         run: yarn build
 
       - name: Publish package
-        if: ${{ success() && (github.event_name == 'push' && github.ref_type == 'tag') || github.event_name == 'workflow_dispatch' }}
         run: |
           if [[ ${{ github.ref }} =~ -alpha|-beta|-rc ]]; then
             echo "next\n reference: ${{ github.ref }}";
