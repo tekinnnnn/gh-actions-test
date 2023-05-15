@@ -8,6 +8,7 @@ on:
       - '*-alpha.*'
       - '*-beta.*'
       - '*-rc.*'
+      - 'v*.*.*'
 jobs:
   build-test:
     uses: ./.github/workflows/build-test.yml
