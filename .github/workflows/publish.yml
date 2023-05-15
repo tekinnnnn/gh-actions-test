@@ -31,13 +31,10 @@ jobs:
       - name: Publish package
         if: github.event_name == 'release' && github.event.release.draft == false
         run: |
-          # run yarn publish --tag next if the release is a prerelease or tag is includes alpha, beta, rc
           if [[ ${{ github.event.release.prerelease }} == true || ${{ github.event.release.tag_name }} =~ -alpha|-beta|-rc ]]; then
-            echo "branch: ${{ github.ref }}"
             yarn publish --tag next
           else
-            echo "branch: ${{ github.ref }}"
-            yarn publish
+            yarn publish --tag latest
           fi
 
         env:
